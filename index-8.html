@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Grafika — Grafik Interaktif</title>
+<style>
+:root{--pink:#df5795;--pink-dark:#a83270;--pink-light:#fcebf3;--ink:#263d4a;--muted:#71818b;--line:#d9e4e8;--card:#ffffff;--teal:#2e7d83;--teal-light:#eaf5f4;--cream:#f7f5f0}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#f8f6f1,#f9eaf1 58%,#edf5f4);font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);min-height:100vh;padding:24px}
+.wrap{max-width:1150px;margin:auto}.hero{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px}.eyebrow{color:var(--pink-dark);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.hero h1{font-size:clamp(1.8rem,4vw,2.8rem);margin:5px 0 8px;letter-spacing:-.04em}.hero p{margin:0;color:var(--muted);max-width:650px;line-height:1.55}.math-mark{display:flex;align-items:center;justify-content:center;min-width:94px;height:94px;background:var(--teal-light);border:1px solid #cde3e1;border-radius:28px;padding:12px 18px;box-shadow:0 12px 35px #285e6312;color:var(--teal);font-family:Georgia,serif;font-size:2.2rem;font-weight:700}.math-mark span{display:block;text-align:center;line-height:1.05}
+.layout{display:grid;grid-template-columns:330px minmax(0,1fr);gap:20px;align-items:start}.panel,.chart-card{background:rgba(255,255,255,.94);border:1px solid #dce6e8;border-radius:22px;box-shadow:0 14px 40px #284a5310}.panel{padding:22px}.panel h2,.chart-card h2{font-size:1.08rem;margin:0 0 18px}.field{margin-bottom:16px}.field label{display:block;font-size:.86rem;font-weight:750;margin-bottom:7px}.field input[type=text],.field input[type=number],textarea{width:100%;border:1px solid #d8e2e5;border-radius:12px;padding:11px 12px;background:#fff;color:var(--ink);font:inherit;outline:none}.field input:focus,textarea:focus{border-color:var(--pink);box-shadow:0 0 0 3px #df57951b}textarea{min-height:155px;resize:vertical;line-height:1.65;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.9rem}.hint{font-size:.78rem;color:var(--muted);line-height:1.5;margin-top:7px}.color-row{display:flex;gap:10px;align-items:center}.color-row input[type=color]{width:52px;height:43px;border:0;background:transparent;padding:0;cursor:pointer}.swatch-label{font-size:.9rem;color:var(--muted)}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn{border:0;border-radius:12px;padding:11px 15px;font:inherit;font-weight:800;cursor:pointer;transition:transform .15s,box-shadow .15s}.btn:hover{transform:translateY(-1px)}.primary{background:var(--pink);color:white;box-shadow:0 7px 15px #e84b9130}.secondary{background:var(--teal-light);color:var(--teal);border:1px solid #cde3e1}.chart-card{padding:20px;min-width:0}.chart-top{display:flex;justify-content:space-between;align-items:start;gap:12px;margin-bottom:10px}.chart-top h2{margin-bottom:5px}.sub{font-size:.82rem;color:var(--muted)}.pill{background:#fff0f6;color:var(--pink-dark);font-size:.75rem;font-weight:800;padding:7px 10px;border-radius:999px;white-space:nowrap}.canvas-wrap{width:100%;position:relative}canvas{display:block;width:100%;height:470px;border-radius:14px;background:#fffdfd;cursor:crosshair}.chart-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 12px}.control-label{font-size:.82rem;color:var(--muted);font-weight:700}.zoom-value{font-size:.82rem;color:var(--pink-dark);font-weight:800;min-width:58px;text-align:center}.toggle{display:inline-flex;align-items:center;gap:7px;background:#f1f7f6;border:1px solid #d6e6e4;border-radius:12px;padding:9px 11px;font-size:.84rem;font-weight:700}.toggle input{accent-color:var(--pink);width:16px;height:16px}.coord-readout{margin-top:12px;border:1px solid #f3c9dc;background:#fff5f9;border-radius:14px;padding:12px 14px;color:var(--ink);font-size:.9rem;min-height:46px}.coord-readout strong{color:var(--pink-dark)}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px}.stat{padding:13px;background:#f5f7f6;border:1px solid #e0e8e8;border-radius:14px;min-width:0}.stat .label{font-size:.75rem;color:var(--muted);margin-bottom:5px}.stat .value{font-size:1rem;font-weight:850;overflow-wrap:anywhere}.below{font-size:.8rem;color:var(--muted);margin:14px 2px 0;line-height:1.55}.error{color:#b4235e;font-size:.82rem;margin-top:8px;min-height:1.1em}.footer{text-align:center;color:#9b7185;font-size:.78rem;margin-top:22px}
+@media(max-width:820px){body{padding:14px}.layout{grid-template-columns:1fr}.hero{align-items:flex-start}.math-mark{border-radius:18px;padding:8px 12px;min-width:70px;height:70px}.panel{padding:18px}.chart-card{padding:13px}canvas{height:380px}.stats{gap:7px}.stat{padding:10px}.stat .value{font-size:.9rem}}
+@media(max-width:420px){.math-mark{min-width:58px;height:58px;font-size:1.6rem}.chart-top{flex-direction:column}.pill{white-space:normal}.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:span 2}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div><div class="eyebrow">✦ Math made lovely</div><h1>Grafika</h1></div>
+    <div class="math-mark" aria-hidden="true"><span>∑<br>𝑥²</span></div>
+  </header>
+  <main class="layout">
+    <section class="panel">
+      <h2>Pengaturan grafik</h2>
+      <div class="field"><label for="xLabel">Keterangan sumbu X</label><input id="xLabel" type="text" placeholder="Misalnya: Jarak (km)" maxlength="60"></div>
+      <div class="field"><label for="yLabel">Keterangan sumbu Y</label><input id="yLabel" type="text" placeholder="Misalnya: Tarif (rupiah)" maxlength="60"></div>
+      <div class="field"><label for="lineColor">Warna garis grafik</label><div class="color-row"><input id="lineColor" type="color" value="#e84b91" aria-label="Pilih warna garis"><span class="swatch-label" id="colorText">Pink rose · #e84b91</span></div></div>
+      <div class="field"><label for="data">Data koordinat (X, Y)</label><textarea id="data" spellcheck="false" placeholder="Masukkan satu pasangan X, Y per baris&#10;Misalnya: 2, 9000&#10;4, 13000"></textarea><div class="hint">Isi nama sumbu X dan Y pada kotak di atas. Untuk data, tulis satu pasangan <b>X, Y</b> pada setiap baris. Gunakan titik untuk desimal, misalnya <code>20.1, 9000.5</code>.</div></div>
+      <div class="actions"><button class="btn primary" id="drawBtn" type="button">Gambar grafik ↗</button><button class="btn secondary" id="resetBtn" type="button">Reset semua</button></div>
+      <div class="error" id="error" role="status" aria-live="polite"></div>
+    </section>
+    <section class="chart-card">
+      <div class="chart-top"><h2>Grafik koordinat</h2></div>
+      <div class="chart-controls"><span class="control-label">Skala grafik:</span><button class="btn secondary" id="zoomOutBtn" type="button">− Zoom out</button><button class="btn secondary" id="zoomInBtn" type="button">＋ Zoom in</button><span class="zoom-value" id="zoomValue">100%</span><label class="toggle"><input type="checkbox" id="connectLines" checked> Hubungkan titik dengan garis</label></div>
+      <div class="canvas-wrap"><canvas id="chart" aria-label="Grafik koordinat interaktif dengan grid, angka, dan titik yang bisa dipilih"></canvas></div>
+      <div class="coord-readout" id="coordReadout" aria-live="polite">Klik salah satu titik pada grafik untuk melihat koordinatnya.</div>
+    </section>
+  </main>
+  <div class="footer">Eksplorasi matematika melalui grafik koordinat</div>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+const canvas = $('chart'), ctx = canvas.getContext('2d');
+let points = [], zoomLevel = 1, selectedPoint = null, plot = null;
+function parseData(){
+  const lines = $('data').value.split(/\n/).map(s=>s.trim()).filter(Boolean);
+  if(!lines.length) throw new Error('Masukkan minimal satu pasangan data X dan Y.');
+  return lines.map((line,i)=>{
+    const parts=line.split(/[;,\t ]+/).filter(Boolean);
+    if(parts.length!==2) throw new Error(`Baris ${i+1}: gunakan format X, Y (contoh: 2, 9000).`);
+    const x=Number(parts[0]), y=Number(parts[1]);
+    if(!Number.isFinite(x)||!Number.isFinite(y)) throw new Error(`Baris ${i+1}: X dan Y harus berupa angka.`);
+    return {x,y,index:i+1};
+  });
+}
+function niceStep(range,target=6){
+  if(!Number.isFinite(range)||range<=0)return 1;
+  const raw=range/target, power=Math.pow(10,Math.floor(Math.log10(raw))), n=raw/power;
+  return (n<=1?1:n<=2?2:n<=5?5:10)*power;
+}
+function bounds(values){
+  let min=Math.min(...values),max=Math.max(...values);
+  if(min===max){const pad=Math.abs(min)*.15||1;min-=pad;max+=pad;}
+  const pad=(max-min)*.08; min-=pad;max+=pad;
+  const center=(min+max)/2, half=(max-min)/(2*zoomLevel);min=center-half;max=center+half;
+  const step=niceStep(max-min,7);return {min:Math.floor(min/step)*step,max:Math.ceil(max/step)*step,step};
+}
+function fmt(n){if(Math.abs(n)<1e-9)n=0;return new Intl.NumberFormat('id-ID',{maximumFractionDigits:6,useGrouping:false}).format(n)}
+function drawAxisLabel(label,x,y){
+  const match=label.match(/^(.*?)(?:\s*\((.*?)\))?$/);
+  const main=(match?.[1]||label).trim(),unit=(match?.[2]||'').trim();
+  ctx.font='600 12px Inter, Segoe UI, Arial, sans-serif';
+  if(!unit){ctx.fillText(main,x,y);return;}
+  const unitText='('+unit+')';
+  const mainWidth=ctx.measureText(main+' ').width;
+  ctx.font='10px Inter, Segoe UI, Arial, sans-serif';
+  const unitWidth=ctx.measureText(unitText).width;
+  const start=x-(mainWidth+unitWidth)/2;
+  ctx.textAlign='left';ctx.font='600 12px Inter, Segoe UI, Arial, sans-serif';ctx.fillText(main,start,y);
+  ctx.font='10px Inter, Segoe UI, Arial, sans-serif';ctx.fillStyle='#71818b';ctx.fillText(unitText,start+mainWidth,y);ctx.textAlign='center';ctx.fillStyle='#263d4a';
+}
+function draw(){
+  $('error').textContent='';
+  try{const raw=$('data').value.trim();points=raw?parseData():[]}catch(e){$('error').textContent=e.message;return}
+  const color=$('lineColor').value, xName=$('xLabel').value.trim()||'X', yName=$('yLabel').value.trim()||'Y';
+  const rect=canvas.getBoundingClientRect(), dpr=window.devicePixelRatio||1;
+  const cssHeight=window.matchMedia('(max-width:820px)').matches?380:470;
+  canvas.width=Math.max(300,Math.floor(rect.width*dpr));canvas.height=Math.floor(cssHeight*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  const W=canvas.width/dpr,H=canvas.height/dpr;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#fffdfd';ctx.fillRect(0,0,W,H);
+  const pad={l:Math.min(76,W*.2),r:22,t:24,b:65}, pw=W-pad.l-pad.r,ph=H-pad.t-pad.b;
+  const xb=points.length?bounds(points.map(p=>p.x)):{min:0,max:10,step:1},yb=points.length?bounds(points.map(p=>p.y)):{min:0,max:10,step:1};
+  const X=x=>pad.l+(x-xb.min)/(xb.max-xb.min)*pw;
+  const Y=y=>pad.t+ph-(y-yb.min)/(yb.max-yb.min)*ph;
+  plot={pad,pw,ph,xb,yb,X,Y,W,H};
+  ctx.font='11px system-ui, sans-serif';ctx.lineWidth=1;
+  for(let i=0;xb.min+i*xb.step<=xb.max+xb.step*.001&&i<200;i++){
+    const v=xb.min+i*xb.step;
+    const x=X(v);ctx.strokeStyle='#e2e9e9';ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,pad.t+ph);ctx.stroke();
+    ctx.fillStyle='#71818b';ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(fmt(v),x,pad.t+ph+9);
+  }
+  for(let i=0;yb.min+i*yb.step<=yb.max+yb.step*.001&&i<200;i++){
+    const v=yb.min+i*yb.step;
+    const y=Y(v);ctx.strokeStyle='#e2e9e9';ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+pw,y);ctx.stroke();
+    ctx.fillStyle='#71818b';ctx.textAlign='right';ctx.textBaseline='middle';ctx.fillText(fmt(v),pad.l-10,y);
+  }
+  ctx.strokeStyle='#68868b';ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,pad.t+ph);ctx.lineTo(pad.l+pw,pad.t+ph);ctx.stroke();
+  ctx.fillStyle='#263d4a';ctx.textAlign='center';ctx.textBaseline='alphabetic';drawAxisLabel(xName,pad.l+pw/2,H-13);
+  ctx.save();ctx.translate(17,pad.t+ph/2);ctx.rotate(-Math.PI/2);ctx.textAlign='center';drawAxisLabel(yName,0,0);ctx.restore();
+  if($('connectLines').checked && points.length>1){
+    ctx.strokeStyle=color;ctx.lineWidth=3;ctx.lineJoin='round';ctx.lineCap='round';ctx.beginPath();
+    points.forEach((p,i)=>{if(i===0)ctx.moveTo(X(p.x),Y(p.y));else ctx.lineTo(X(p.x),Y(p.y))});ctx.stroke();
+  }
+  points.forEach((p,i)=>{
+    const x=X(p.x),y=Y(p.y),isSelected=selectedPoint===i;
+    ctx.beginPath();ctx.arc(x,y,isSelected?7:5,0,Math.PI*2);ctx.fillStyle=isSelected?'#ffe0ed':'#fff';ctx.fill();ctx.lineWidth=isSelected?3:2.5;ctx.strokeStyle=color;ctx.stroke();
+  });
+  $('zoomValue').textContent=`${Math.round(zoomLevel*100)}%`;
+  if(selectedPoint!==null && points[selectedPoint]) showCoordinate(selectedPoint);
+  if(!points.length)$('coordReadout').textContent='Klik salah satu titik pada grafik untuk melihat koordinatnya.';
+  $('colorText').textContent=`Warna: ${color.toLowerCase()}`;
+}
+function showCoordinate(index){
+  const p=points[index]; if(!p)return;
+  $('coordReadout').innerHTML=`Titik <strong>${index+1}</strong> — Koordinat: <strong>(${fmt(p.x)}, ${fmt(p.y)})</strong>`;
+}
+canvas.addEventListener('click',e=>{
+  if(!plot)return;const rect=canvas.getBoundingClientRect();
+  const mx=e.clientX-rect.left,my=e.clientY-rect.top;
+  let nearest=-1,dist=Infinity;
+  points.forEach((p,i)=>{const dx=plot.X(p.x)-mx,dy=plot.Y(p.y)-my,d=Math.hypot(dx,dy);if(d<dist){dist=d;nearest=i;}});
+  if(nearest>=0&&dist<18){selectedPoint=nearest;draw();showCoordinate(nearest);}
+});
+$('drawBtn').addEventListener('click',()=>{selectedPoint=null;draw();$('coordReadout').textContent=points.length?'Klik salah satu titik pada grafik untuk melihat koordinatnya.':'Klik salah satu titik pada grafik untuk melihat koordinatnya.'});
+$('zoomInBtn').addEventListener('click',()=>{zoomLevel=Math.min(zoomLevel*1.5,100000);draw()});
+$('zoomOutBtn').addEventListener('click',()=>{zoomLevel=Math.max(zoomLevel/1.5,0.01);draw()});
+$('resetBtn').addEventListener('click',()=>{ $('xLabel').value='';$('yLabel').value='';$('data').value='';$('lineColor').value='#df5795';$('connectLines').checked=true;zoomLevel=1;selectedPoint=null;points=[];$('error').textContent='';$('coordReadout').textContent='Klik salah satu titik pada grafik untuk melihat koordinatnya.';draw();});
+$('connectLines').addEventListener('change',draw);
+$('lineColor').addEventListener('input',draw);$('xLabel').addEventListener('change',draw);$('yLabel').addEventListener('change',draw);
+let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(draw,100)});
+draw();
+</script>
+</body>
+</html>
